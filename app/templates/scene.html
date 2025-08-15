@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>CyberSec Mission Console</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: radial-gradient(circle at center, #0e270d, #000);
+            color: #00ffcc;
+            font-family: 'Share Tech Mono', monospace;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 40px auto;
+            padding: 40px;
+            border: 1px solid #00ffcc;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            box-shadow: 0 0 30px #00ffcc;
+            text-align: center;
+        }
+
+        h2 {
+            color: #39ff14;
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+
+        .blinker {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background: #00ffcc;
+            animation: blink 1s step-end infinite;
+            margin-left: 5px;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .guide-box {
+            background-color: #001f1f;
+            border-left: 4px solid #00ffcc;
+            border-radius: 5px;
+            color: #00ffaa;
+            font-size: 15px;
+            text-align: left;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-family: monospace;
+            background-color: #111;
+            color: #00ffcc;
+            border: 1px solid #00ffcc;
+            border-radius: 5px;
+            resize: vertical;
+            transition: box-shadow 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            box-shadow: 0 0 10px #00ffaa;
+        }
+
+        .choice-btn {
+            display: inline-block;
+            margin: 10px 6px;
+            padding: 12px 30px;
+            font-size: 17px;
+            background-color: #111;
+            border: 2px solid #00ffcc;
+            border-radius: 5px;
+            color: #00ffcc;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .choice-btn:hover {
+            background-color: #00ffcc;
+            color: #111;
+            box-shadow: 0 0 10px #00ffcc, inset 0 0 20px #00ffcc;
+        }
+
+        .choice-btn.red {
+            border-color: #d9534f;
+            color: #d9534f;
+        }
+
+        .choice-btn.red:hover {
+            background-color: #d9534f;
+            color: #111;
+            box-shadow: 0 0 10px #d9534f, inset 0 0 20px #d9534f;
+        }
+
+        .choice-btn.blue {
+            border-color: #5cb85c;
+            color: #5cb85c;
+        }
+
+        .choice-btn.blue:hover {
+            background-color: #5cb85c;
+            color: #111;
+            box-shadow: 0 0 10px #5cb85c, inset 0 0 20px #5cb85c;
+        }
+
+        .scan-result {
+            background-color: #112;
+            border: 1px solid #00ffaa;
+            color: #00ffaa;
+            font-size: 16px;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px #00ffaa;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: repeating-linear-gradient(to bottom,
+                    rgba(0, 255, 204, 0.06),
+                    rgba(0, 255, 204, 0.06) 2px,
+                    transparent 2px,
+                    transparent 4px);
+            z-index: -1;
+            animation: scanlines 3s linear infinite;
+            will-change: background-position;
+        }
+
+        @keyframes scanlines {
+            0% {
+                background-position: 0 0;
+            }
+
+            100% {
+                background-position: 0 4px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>{{ text|safe }}<span class="blinker"></span></h2>
+
+        {% if show_terminal %}
+        <div class="guide-box">
+            🎯 <strong>Objective:</strong><br />
+            {{ guide_text }}
+        </div>
+
+        <form method="POST">
+            <textarea name="user_command" rows="3" placeholder="Type your command here..."></textarea>
+            <button type="submit" class="choice-btn">Run</button>
+        </form>
+
+        {% if command_output %}
+        <div class="scan-result">{{ command_output }}</div>
+        {% endif %}
+        {% endif %}
+
+        {% if choices %}
+        <form method="POST">
+            {% for choice, next_scene in choices %}
+            <button class="choice-btn {% if 'red' in next_scene %}red{% elif 'blue' in next_scene %}blue{% endif %}"
+                name="choice" value="{{ next_scene }}">
+                {{ choice }}
+            </button>
+            {% endfor %}
+        </form>
+        {% endif %}
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,7 @@
+Used flask 
+Kept the story base into dictionary 
+Made 2 storylines --> Red - Theif --> Blue - Cop 
+made user choose anyone and let the story continue
+for red team currently there are 2 tools - nmap and Hydra
+for blue team 2 tools - ifconfing and tail 
+later on i will add few more tools and storyline to it
